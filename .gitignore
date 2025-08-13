@@ -1,2 +1,3 @@
-mytoken.txt
+modules/mytoken.txt
 .venv/
+test.ipynb
